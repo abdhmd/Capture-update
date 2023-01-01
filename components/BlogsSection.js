@@ -2,16 +2,22 @@ import { Button, Container, SubHeading } from "./content-styles/ContentStyles";
 import Link from "next/link";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { urlFor } from "../lib/client";
-import { useState, useEffect } from "react";
-const Blogs = ({ categories, posts }) => {
-  const fsPost = posts.filter((post) => post.categories[0].title === categories[0].title);
+import { useState } from "react";
+const BlogsSection= ({ categories, posts }) => {
+  const fsPost = posts.filter(
+    (post) => post.categories[0].title === categories[0].title
+  );
   const [filterMyposts, setFilterMyposts] = useState(fsPost);
+  // filter my posts
   const filterPosts = (title) => {
     const filtred = posts.filter((post) => post.categories[0].title === title);
-   setFilterMyposts(filtred)
+    setFilterMyposts(filtred);
   };
+  const PostsList = filterMyposts.slice(1);
+
+  // choose first post
   const FirstPost = filterMyposts[0];
-  const PostsList = filterMyposts.slice(1)
+
   return (
     <section id="blog" className="py-6  md:py-8 lg:py-16">
       <SubHeading props="latest blogs" />
@@ -22,7 +28,7 @@ const Blogs = ({ categories, posts }) => {
               <li
                 key={category._id}
                 onClick={() => filterPosts(category.title)}
-                className="cursor-pointer"
+                className="cursor-pointer uppercase mx-2"
               >
                 {category.title}
               </li>
@@ -50,7 +56,7 @@ const Blogs = ({ categories, posts }) => {
 
               <p className="my-4 text-gray-700">{FirstPost.subtitle}</p>
               <button>
-                <Link href="/" className="flex items-center gap-1 text-primary">
+                <Link href={`/blogs/${FirstPost.slug}`} className="flex items-center gap-1 text-primary">
                   Read more
                   <span className="flex  text-black ">
                     <HiArrowLongRight />
@@ -73,17 +79,22 @@ const Blogs = ({ categories, posts }) => {
               return (
                 <li key={post._id} className="">
                   <Link
-                    href="/"
-                    className="grid grid-cols-2 gap-4 grid-rows-1  "
+                    href={`/blogs/${post.slug}`}
+                    className="grid grid-cols-2 items-center gap-4 grid-rows-1  "
                   >
                     <img
                       src={urlFor(post.mainImage).url()}
                       alt="just an image"
                       className="w-full h-32 shadow-lg "
                     />
-                    <p className="text-sm font-medium leading-4  h-fit">
-                      {post.title}
-                    </p>
+                    <div className="border border-black h-full p-4 flex flex-col justify-between">
+                      <p className="  text-sm capitalize  font-semibold leading-5  h-fit">
+                        {post.title}
+                      </p>
+                      <h4 className="font-medium text-sm text-gray-500">
+                        {post.name} | {parseInt(post.publishedAt)}
+                      </h4>
+                    </div>
                   </Link>
                 </li>
               );
@@ -92,11 +103,13 @@ const Blogs = ({ categories, posts }) => {
         </div>
 
         <div className="text-center">
-          <Button props="w-full md:w-fit">read more blogs</Button>
+          <Button props="w-full md:w-fit">
+            <Link href="/blogs">read more blogs</Link>
+          </Button>
         </div>
       </Container>
     </section>
   );
 };
 
-export default Blogs;
+export default BlogsSection;

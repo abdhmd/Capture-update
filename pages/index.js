@@ -1,11 +1,11 @@
-import { Header, Blogs, About, Contact, Subscribe } from "../components";
+import { Header,  About, Contact, Subscribe, BlogsSection } from "../components";
 import { client } from "../lib/client";
 import groq from "groq";
 const Home = ({ category,posts }) => {
   return (
     <div>
       <Header heading="capture" subHeading="tell a story of an amazing photo" />
-      <Blogs categories={category}  posts={posts}/>
+      <BlogsSection categories={category}  posts={posts}/>
       <About />
       <Contact />
       <Subscribe />
@@ -25,7 +25,7 @@ export async function getStaticProps() {
    "categories": categories[]-> {title},
    body,
    mainImage,
-   slug,
+   "slug":slug.current,
    publishedAt
    
   }`);
