@@ -29,17 +29,17 @@ const Post = ({ post, posts }) => {
         <Button props="md:w-fit">
           <Link href="/blogs"> back to blogs</Link>
         </Button>
-        <div className="h-52 md:h-96  w-full">
+        <div className="h-52 md:h-96  w-full lg:border border-black lg:p-4">
           <img
             src={urlFor(post.mainImage).url()}
             alt={post.title}
-            className="h-full w-full"
+            className="h-full w-full shadow-md"
           />
         </div>
 
         <div className=" grid md:grid-cols-3 gap-4">
           <div className=" flex flex-col justify-between md:col-span-2">
-            <div className="  grid  mb-4 border border-black p-4 h-full">
+            <div className="  grid gap-4 mb-4 border border-black p-4 h-full">
               {text.map((paragraph, i) => {
                 return <p key={i}>{paragraph[0].text}</p>;
               })}
