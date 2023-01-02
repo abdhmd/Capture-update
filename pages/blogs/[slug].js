@@ -1,6 +1,8 @@
 import { Header } from "../../components";
 import { Container } from "../../components/content-styles/ContentStyles";
 import { client } from "../../lib/client";
+import { publishedAt } from "../../components/BlogsSection";
+
 
 const Post = ({ post }) => {
   const text = post.body.map((content) => content.children);
@@ -8,15 +10,15 @@ const Post = ({ post }) => {
     <Container>
       <Header
         heading={post.title}
-        subHeading={`${post.name} | ${post.publishedAt}`}
+        subHeading={`${post.name} | ${publishedAt(post.publishedAt)}`}
       />
 
-      <div className="flex flex-col gap-2">
+      <section className="flex flex-col gap-2 py-6  md:py-8 lg:py-16">
         {text.map((paragraph, i) => {
           console.log(paragraph)
           return <p key={i}>{paragraph[0].text}</p>;
         })}
-      </div>
+      </section>
     </Container>
   );
 };
@@ -56,8 +58,6 @@ export const getStaticProps = async ({ params: { slug } }) => {
   }`;
 
   const post = await client.fetch(query);
-
-  console.log(post);
 
   return {
     props: { post },

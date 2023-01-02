@@ -5,6 +5,7 @@ import { HiArrowLongRight } from "react-icons/hi2";
 import Link from "next/link";
 import groq from "groq";
 import { useState } from "react";
+import { publishedAt } from "../../components/BlogsSection";
 
 const Blogs = ({ posts, category }) => {
   const categories = category;
@@ -16,7 +17,7 @@ const Blogs = ({ posts, category }) => {
     setFilterMyposts(filtred);
   };
   return (
-    <section>
+    <section className="py-6  md:py-8 lg:py-16">
       <Header heading="trending blogs" subHeading="best story" />
       <Container>
         <ul className="flex justify-center gap-2 md:gap-4 text-sm font-medium my-6 md:my-8">
@@ -40,20 +41,23 @@ const Blogs = ({ posts, category }) => {
             );
           })}
         </ul>
-        <div className="grid  md:grid-cols-2 justify-start gap-2">
+        <div className="grid  md:grid-cols-2 lg:grid-cols-3 gap-4 justify-start  w-full ">
           {filterMyposts.map((post) => {
             return (
               <div
                 key={post._id}
-                className="border border-black p-2 flex flex-col h-fit"
+                className="  grid  h-max  gap-4   pb-4 "
               >
                 <img
                   src={urlFor(post.mainImage).url()}
                   alt="image"
-                  className="w-full h-52"
+                  className="w-full h-52 lg:h-56 shadow-md"
                 />
-                <div>
-                  <h3 className="text-xl font-medium mb-4">{post.title}</h3>
+                <div className="">
+                  <h3 className="text-2xl font-medium mb-4">{post.title}</h3>
+                  <h4 className="mb-2 text-gray-500 font-medium">
+                    {post.name} | {publishedAt(post.publishedAt)}
+                  </h4>
                   <div className="flex gap-1">
                     {post.categories.map((category) => {
                       return (
@@ -66,7 +70,7 @@ const Blogs = ({ posts, category }) => {
                       );
                     })}
                   </div>
-                  <p>{post.subtitle}</p>
+                  <p className=" overflow-hidden h-12 my-2">{post.subtitle}</p>
                   <button>
                     <Link
                       href={`/blogs/${post.slug}`}

@@ -3,14 +3,24 @@ import Link from "next/link";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { urlFor } from "../lib/client";
 import { useState } from "react";
-const BlogsSection= ({ categories, posts }) => {
+
+export const publishedAt = (jsonDate) => {
+  const date = new Date(jsonDate).getDate();
+  const month = new Date(jsonDate).getMonth();
+  const year = new Date(jsonDate).getFullYear();
+
+  return `${date}-${month}-${year}`;
+};
+
+const BlogsSection = ({ categories, posts }) => {
+  console.log(posts.categories)
   const fsPost = posts.filter(
     (post) => post.categories[0].title === categories[0].title
   );
   const [filterMyposts, setFilterMyposts] = useState(fsPost);
   // filter my posts
   const filterPosts = (title) => {
-    const filtred = posts.filter((post) => post.categories[0].title === title);
+    const filtred = posts.filter((post) => post.categories[0].title === title  );
     setFilterMyposts(filtred);
   };
   const PostsList = filterMyposts.slice(1);
@@ -40,7 +50,7 @@ const BlogsSection= ({ categories, posts }) => {
           <img
             src={urlFor(FirstPost.mainImage).url()}
             alt="image"
-            className="w-full h-72"
+            className="w-full h-52"
           />
           <div>
             <div className="mt-4 md:mt-0">
@@ -49,14 +59,17 @@ const BlogsSection= ({ categories, posts }) => {
               </h3>
               <div className="grid  capitalize">
                 <h4 className="font-medium text-sm text-gray-500">
-                  {FirstPost.name} | {FirstPost.publishedAt}
+                  {FirstPost.name} | {publishedAt(FirstPost.publishedAt)}
                 </h4>
                 <span className="-mt-4  text-gray-500">__________</span>
               </div>
 
               <p className="my-4 text-gray-700">{FirstPost.subtitle}</p>
               <button>
-                <Link href={`/blogs/${FirstPost.slug}`} className="flex items-center gap-1 text-primary">
+                <Link
+                  href={`/blogs/${FirstPost.slug}`}
+                  className="flex items-center gap-1 text-primary"
+                >
                   Read more
                   <span className="flex  text-black ">
                     <HiArrowLongRight />
@@ -74,25 +87,25 @@ const BlogsSection= ({ categories, posts }) => {
             <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span>
           </div>
 
-          <ul className="my-4 md:my-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-x-20 lg:gap-x-2">
+          <ul className="my-4 border border-black p-4 md:my-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4 ">
             {PostsList?.map((post) => {
               return (
                 <li key={post._id} className="">
                   <Link
                     href={`/blogs/${post.slug}`}
-                    className="grid grid-cols-2 items-center gap-4 grid-rows-1  "
+                    className="grid  items-center gap-4 grid-rows-1  "
                   >
                     <img
                       src={urlFor(post.mainImage).url()}
                       alt="just an image"
                       className="w-full h-32 shadow-lg "
                     />
-                    <div className="border border-black h-full p-4 flex flex-col justify-between">
+                    <div className=" h-full  flex flex-col justify-between">
                       <p className="  text-sm capitalize  font-semibold leading-5  h-fit">
                         {post.title}
                       </p>
                       <h4 className="font-medium text-sm text-gray-500">
-                        {post.name} | {parseInt(post.publishedAt)}
+                        {post.name} | {publishedAt(post.publishedAt)}
                       </h4>
                     </div>
                   </Link>
