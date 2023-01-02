@@ -11,7 +11,7 @@ const About = () => {
     <section id="about" className="flex flex-col md:flex-row">
       <div>
         <Image src={aboutPic} 
-        className="h-full"
+        className="h-52 md:h-full px-4 md:px-0"
         alt="just an image"
         />
       </div>

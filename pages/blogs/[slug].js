@@ -1,11 +1,23 @@
 import { Header } from "../../components";
-import { Container } from "../../components/content-styles/ContentStyles";
-import { client } from "../../lib/client";
+import {
+  Container,
+  Button,
+} from "../../components/content-styles/ContentStyles";
+import { client, urlFor } from "../../lib/client";
 import { publishedAt } from "../../components/BlogsSection";
+import Link from "next/link";
+import { FaFacebookF, FaTwitter } from "react-icons/fa";
+import { useState } from "react";
 
+const Post = ({ post, posts }) => {
+  const filter = posts.filter(
+    (p) => p.categories[0].title === post.categories[0].title
+  );
 
-const Post = ({ post }) => {
+  const PostsList = filter;
+
   const text = post.body.map((content) => content.children);
+
   return (
     <Container>
       <Header
@@ -13,11 +25,116 @@ const Post = ({ post }) => {
         subHeading={`${post.name} | ${publishedAt(post.publishedAt)}`}
       />
 
-      <section className="flex flex-col gap-2 py-6  md:py-8 lg:py-16">
-        {text.map((paragraph, i) => {
-          console.log(paragraph)
-          return <p key={i}>{paragraph[0].text}</p>;
-        })}
+      <section className="flex flex-col gap-4 py-6  md:py-8 lg:py-16">
+        <Button props="md:w-fit">
+          <Link href="/blogs"> back to blogs</Link>
+        </Button>
+        <div className="h-52 md:h-96  w-full">
+          <img
+            src={urlFor(post.mainImage).url()}
+            alt={post.title}
+            className="h-full w-full"
+          />
+        </div>
+
+        <div className=" grid md:grid-cols-3 gap-4">
+          <div className=" flex flex-col justify-between md:col-span-2">
+            <div className="  grid  mb-4 border border-black p-4 h-full">
+              {text.map((paragraph, i) => {
+                return <p key={i}>{paragraph[0].text}</p>;
+              })}
+            </div>
+
+            <div className="border border-black p-4">
+              <div className=" flex md:grid md:grid-cols-4 items-center justify-between  my-4 ">
+                <h3 className="font-medium text-sm  capitalize text-gray-700 w-full">
+                  a blog about
+                </h3>
+                <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span>
+              </div>
+
+              <div className="flex gap-1">
+                {post.categories.map((category) => {
+                  return (
+                    <p
+                      key={category.title}
+                      className="text-xs font-medium text-white p-1 bg-primary lowercase "
+                    >
+                      {`#${category.title}`}
+                    </p>
+                  );
+                })}
+              </div>
+
+              <div className=" flex md:grid md:grid-cols-4 items-center justify-between  my-4">
+                <h3 className="font-medium text-sm  capitalize text-gray-700 w-full">
+                  share the blog
+                </h3>
+                <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span>
+              </div>
+              <div className="flex gap-4">
+                <button>
+                  <Link
+                    href="https://www.facebook.com"
+                    className="flex bg-blue-700 text-white justify-center items-center gap-2 text-xs font-semibold uppercase px-3 py-2"
+                  >
+                    <span>
+                      <FaFacebookF />
+                    </span>
+                    <span>facebook</span>
+                  </Link>
+                </button>
+                <button>
+                  <Link
+                    href="https://www.twitter.com"
+                    className="flex bg-cyan-500 text-white justify-center items-center gap-2 text-xs font-semibold uppercase p-2"
+                  >
+                    <span>
+                      <FaTwitter />
+                    </span>
+                    <span>twitter</span>
+                  </Link>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="border border-black h-fit p-4">
+            <h3 className="text-center uppercase text-xl font-medium  mb-4">
+              {" "}
+              more seggestions
+            </h3>
+            <ul className="  grid gap-4 ">
+              {PostsList?.map((postItem) => {
+                return (
+                  <li
+                    key={postItem._id}
+                    className={`${postItem.title === post.title && "hidden"}`}
+                  >
+                    <Link
+                      href={`/blogs/${postItem.slug}`}
+                      className="grid  items-center gap-4 grid-rows-1  "
+                    >
+                      <img
+                        src={urlFor(postItem.mainImage).url()}
+                        alt="just an image"
+                        className="w-full h-36 shadow-md "
+                      />
+                      <div className=" h-full  flex flex-col justify-between">
+                        <p className="  text-sm capitalize  font-semibold leading-5  h-fit">
+                          {postItem.title}
+                        </p>
+                        <h4 className="font-medium text-sm text-gray-500">
+                          {postItem.name} | {publishedAt(postItem.publishedAt)}
+                        </h4>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
       </section>
     </Container>
   );
@@ -46,6 +163,21 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params: { slug } }) => {
+  const posts = await client.fetch(`
+    *[_type == "post"] | order(publishedAt desc) {
+     _id,
+     title,
+     subtitle,
+     "name": author->name,
+     "authorImage": author->avatar,
+     "categories": categories[]-> {title},
+     body,
+     mainImage,
+     "slug":slug.current,
+     publishedAt,
+     
+    }`);
+
   const query = `*[_type == "post" && slug.current == '${slug}'][0]{
     _id,
      title,
@@ -60,7 +192,7 @@ export const getStaticProps = async ({ params: { slug } }) => {
   const post = await client.fetch(query);
 
   return {
-    props: { post },
+    props: { posts, post },
   };
 };
 

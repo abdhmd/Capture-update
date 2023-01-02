@@ -13,7 +13,6 @@ export const publishedAt = (jsonDate) => {
 };
 
 const BlogsSection = ({ categories, posts }) => {
-  console.log(posts.categories)
   const fsPost = posts.filter(
     (post) => post.categories[0].title === categories[0].title
   );
@@ -50,7 +49,7 @@ const BlogsSection = ({ categories, posts }) => {
           <img
             src={urlFor(FirstPost.mainImage).url()}
             alt="image"
-            className="w-full h-52"
+            className="w-full h-52 shadow-md"
           />
           <div>
             <div className="mt-4 md:mt-0">
@@ -98,7 +97,7 @@ const BlogsSection = ({ categories, posts }) => {
                     <img
                       src={urlFor(post.mainImage).url()}
                       alt="just an image"
-                      className="w-full h-32 shadow-lg "
+                      className="w-full h-36 shadow-md "
                     />
                     <div className=" h-full  flex flex-col justify-between">
                       <p className="  text-sm capitalize  font-semibold leading-5  h-fit">

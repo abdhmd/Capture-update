@@ -95,7 +95,7 @@ const Blogs = ({ posts, category }) => {
 export async function getStaticProps() {
   const category = await client.fetch(`*[_type == "category"]`);
   const posts = await client.fetch(groq`
-    *[_type == "post"] {
+    *[_type == "post"] | order(publishedAt desc) {
      _id,
      title,
      subtitle,
@@ -105,7 +105,8 @@ export async function getStaticProps() {
      body,
      mainImage,
      "slug":slug.current,
-     publishedAt
+     publishedAt,
+     _createdAt
      
     }`);
   return {

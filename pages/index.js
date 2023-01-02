@@ -16,7 +16,7 @@ const Home = ({ category,posts }) => {
 export async function getStaticProps() {
   const category = await client.fetch(`*[_type == "category"]`);
   const posts = await client.fetch(groq`
-  *[_type == "post"] {
+  *[_type == "post"  ] | order(publishedAt desc) {
    _id,
    title,
    subtitle,
