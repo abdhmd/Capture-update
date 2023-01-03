@@ -1,13 +1,10 @@
 import { Header } from "../../components";
-import {
-  Container,
-  Button,
-} from "../../components/content-styles/ContentStyles";
+import { Container } from "../../components/content-styles/ContentStyles";
 import { client, urlFor } from "../../lib/client";
 import { publishedAt } from "../../components/BlogsSection";
 import Link from "next/link";
 import { FaFacebookF, FaTwitter } from "react-icons/fa";
-import { useState } from "react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const Post = ({ post, posts }) => {
   const filter = posts.filter(
@@ -26,20 +23,28 @@ const Post = ({ post, posts }) => {
       />
 
       <section className="flex flex-col gap-4 py-6  md:py-8 lg:py-16">
-        <Button props="md:w-fit">
-          <Link href="/blogs"> back to blogs</Link>
-        </Button>
-        <div className="h-52 md:h-96  w-full lg:border border-black lg:p-4">
+        <button className=" w-full  md:w-fit h-12  text-black flex  gap-2 ">
+          <div className="bg-black text-white  flex justify-center items-center   w-12 h-full text-xl">
+            <AiOutlineArrowLeft />
+          </div>
+          <Link
+            href="/blogs"
+            className="border border-black w-full h-full md:px-4 flex justify-center items-center text-xl font-medium uppercase "
+          >
+            back to blogs
+          </Link>
+        </button>
+        <div className="h-52 md:h-96 lg:h-screen  w-full lg:border border-black lg:p-4">
           <img
             src={urlFor(post.mainImage).url()}
             alt={post.title}
-            className="h-full w-full shadow-md"
+            className="h-full w-full shadow-md object-cover"
           />
         </div>
 
         <div className=" grid md:grid-cols-3 gap-4">
-          <div className=" flex flex-col justify-between md:col-span-2">
-            <div className="  grid gap-4 mb-4 border border-black p-4 h-full">
+          <div className=" flex flex-col justify-between   md:col-span-2">
+            <div className="  flex flex-col lg:text-xl gap-4 mb-4 border border-black p-4 h-full ">
               {text.map((paragraph, i) => {
                 return <p key={i}>{paragraph[0].text}</p>;
               })}
@@ -50,7 +55,7 @@ const Post = ({ post, posts }) => {
                 <h3 className="font-medium text-sm  capitalize text-gray-700 w-full">
                   a blog about
                 </h3>
-                <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span>
+                {/* <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span> */}
               </div>
 
               <div className="flex gap-1">
@@ -70,7 +75,7 @@ const Post = ({ post, posts }) => {
                 <h3 className="font-medium text-sm  capitalize text-gray-700 w-full">
                   share the blog
                 </h3>
-                <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span>
+                {/* <span className=" flex w-full h-0.5 col-span-3 bg-primary"></span> */}
               </div>
               <div className="flex gap-4">
                 <button>
@@ -118,7 +123,7 @@ const Post = ({ post, posts }) => {
                       <img
                         src={urlFor(postItem.mainImage).url()}
                         alt="just an image"
-                        className="w-full h-36 shadow-md "
+                        className="w-full h-36 shadow-md object-cover "
                       />
                       <div className=" h-full  flex flex-col justify-between">
                         <p className="  text-sm capitalize  font-semibold leading-5  h-fit">

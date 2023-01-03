@@ -17,10 +17,13 @@ const BlogsSection = ({ categories, posts }) => {
     (post) => post.categories[0].title === categories[0].title
   );
   const [filterMyposts, setFilterMyposts] = useState(fsPost);
+  const [active ,setActive] = useState(categories[0].title)
+
   // filter my posts
   const filterPosts = (title) => {
-    const filtred = posts.filter((post) => post.categories[0].title === title  );
+    const filtred = posts.filter((post) => post.categories[0].title === title);
     setFilterMyposts(filtred);
+    setActive(title)
   };
   const PostsList = filterMyposts.slice(1);
 
@@ -37,7 +40,10 @@ const BlogsSection = ({ categories, posts }) => {
               <li
                 key={category._id}
                 onClick={() => filterPosts(category.title)}
-                className="cursor-pointer uppercase mx-2"
+                className={`${
+                  (category.title === active) & (filterMyposts != posts) &&
+                  "text-primary duration-100"
+                } cursor-pointer uppercase mx-2 `}
               >
                 {category.title}
               </li>
@@ -49,7 +55,7 @@ const BlogsSection = ({ categories, posts }) => {
           <img
             src={urlFor(FirstPost.mainImage).url()}
             alt="image"
-            className="w-full h-52 shadow-md"
+            className="w-full h-52 md:h-72 shadow-md object-cover"
           />
           <div>
             <div className="mt-4 md:mt-0">
@@ -97,7 +103,7 @@ const BlogsSection = ({ categories, posts }) => {
                     <img
                       src={urlFor(post.mainImage).url()}
                       alt="just an image"
-                      className="w-full h-36 shadow-md "
+                      className="w-full h-36 shadow-md object-cover"
                     />
                     <div className=" h-full  flex flex-col justify-between">
                       <p className="  text-sm capitalize  font-semibold leading-5  h-fit">

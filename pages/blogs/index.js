@@ -11,9 +11,17 @@ const Blogs = ({ posts, category }) => {
   const categories = category;
 
   const [filterMyposts, setFilterMyposts] = useState(posts);
+  const [active, setActive] = useState();
   // filter my posts
   const filterPosts = (title) => {
-    const filtred = posts.filter((post) => post.categories[0].title === title);
+    const filtred = posts.filter(
+      (post) =>
+        (post.categories[0] != undefined &&
+          post.categories[0].title === title) ||
+        (post.categories[1] != undefined && post.categories[1].title === title)
+    );
+
+    setActive(title);
     setFilterMyposts(filtred);
   };
   return (
@@ -22,7 +30,9 @@ const Blogs = ({ posts, category }) => {
       <Container>
         <ul className="flex justify-center gap-2 md:gap-4 text-sm font-medium my-6 md:my-8">
           <li
-            className="cursor-pointer uppercase "
+            className={`${
+              filterMyposts === posts && "text-primary duration-100"
+            } cursor-pointer uppercase  `}
             onClick={() => {
               setFilterMyposts(posts);
             }}
@@ -33,8 +43,13 @@ const Blogs = ({ posts, category }) => {
             return (
               <li
                 key={category._id}
-                onClick={() => filterPosts(category.title)}
-                className="cursor-pointer uppercase "
+                onClick={() => {
+                  filterPosts(category.title);
+                }}
+                className={`${
+                  (category.title === active) & (filterMyposts != posts) &&
+                  "text-primary duration-100"
+                } cursor-pointer uppercase  `}
               >
                 {category.title}
               </li>
@@ -44,14 +59,11 @@ const Blogs = ({ posts, category }) => {
         <div className="grid  md:grid-cols-2 lg:grid-cols-3 gap-4 justify-start  w-full ">
           {filterMyposts.map((post) => {
             return (
-              <div
-                key={post._id}
-                className="  grid  h-max  gap-4   pb-4 "
-              >
+              <div key={post._id} className="  grid  h-max  gap-4   pb-4 ">
                 <img
                   src={urlFor(post.mainImage).url()}
                   alt="image"
-                  className="w-full h-52 lg:h-56 shadow-md"
+                  className="w-full h-52 lg:h-56 shadow-md object-cover"
                 />
                 <div className="">
                   <h3 className="text-2xl font-medium mb-4">{post.title}</h3>
