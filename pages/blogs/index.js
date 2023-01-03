@@ -56,10 +56,10 @@ const Blogs = ({ posts, category }) => {
             );
           })}
         </ul>
-        <div className="grid  md:grid-cols-2 lg:grid-cols-3 gap-4 justify-start  w-full ">
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4  space-y-4 w-full ">
           {filterMyposts.map((post) => {
             return (
-              <div key={post._id} className="  grid  h-max  gap-4   pb-4 ">
+              <div key={post._id} className="  grid  h-max  gap-4   pb-4  break-inside-avoid-column">
                 <img
                   src={urlFor(post.mainImage).url()}
                   alt="image"

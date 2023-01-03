@@ -123,7 +123,7 @@ const Post = ({ post, posts }) => {
                       <img
                         src={urlFor(postItem.mainImage).url()}
                         alt="just an image"
-                        className="w-full h-36 shadow-md object-cover "
+                        className="w-full h-40 shadow-md object-cover "
                       />
                       <div className=" h-full  flex flex-col justify-between">
                         <p className="  text-sm capitalize  font-semibold leading-5  h-fit">
