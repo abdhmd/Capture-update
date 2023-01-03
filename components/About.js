@@ -22,7 +22,7 @@ const About = () => {
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti
             labore animi impedit eaque velit quo voluptatum ex pariatur in!
             Laborum veritatis officia aperiam aspernatur adipisci nobis
-            recusandae quis voluptatibus voluptatem!
+            recusandae quis voluptatibus voluptatem
           </p>
           <Button props="w-full lg:w-fit"> read more </Button>
         </Container>
